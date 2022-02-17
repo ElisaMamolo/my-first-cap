@@ -58,7 +58,6 @@ Authorization: Basic alice:
 
 ### ------------------------------------------------------------------------
 # Submit Order as authenticated user
-# (send that three times to get out-of-stock message)
 POST {{server}}/browse/submitOrder
 Content-Type: application/json
 {{me}}
