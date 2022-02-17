@@ -1,0 +1,66 @@
+@server = http://localhost:4004
+@me = Authorization: Basic {{$processEnv USER}}:
+
+
+### ------------------------------------------------------------------------
+# Get service info
+GET {{server}}/browse
+{{me}}
+
+
+### ------------------------------------------------------------------------
+# Get $metadata document
+GET {{server}}/browse/$metadata
+{{me}}
+
+
+### ------------------------------------------------------------------------
+# Browse Albums as any user
+GET {{server}}/browse/Albums?
+  # &$select=name,price
+  # &$expand=artist
+{{me}}
+
+
+### ------------------------------------------------------------------------
+# Fetch Artists as admin
+GET {{server}}/admin/Artists?
+
+
+Authorization: Basic alice:
+
+### ------------------------------------------------------------------------
+# Create Artists
+POST {{server}}/admin/Artists
+Content-Type: application/json;IEEE754Compatible=true
+Authorization: Basic alice:
+
+{
+  "ID": 112,
+  "name": "U2",
+  "albums": "u2 album"
+}
+
+
+### ------------------------------------------------------------------------
+# Create Album
+POST {{server}}/admin/Albums
+Content-Type: application/json;IEEE754Compatible=true
+Authorization: Basic alice:
+
+{
+  "ID": 5,
+  "name": "Street fighing man",
+  "artist": { "ID": 3 },
+  "price": 20,
+  "stock": 2
+}
+
+### ------------------------------------------------------------------------
+# Submit Order as authenticated user
+# (send that three times to get out-of-stock message)
+POST {{server}}/browse/submitOrder
+Content-Type: application/json
+{{me}}
+
+{ "album":1, "quantity":5 }
